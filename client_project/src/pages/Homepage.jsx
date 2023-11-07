@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
+import { useEffect, useState } from "react";
 import TaskList from "../components/TaskList";
+import { fetchTasks } from "../api/tasks";
 
 function Homepage() {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    async function fetchTasks() {
-      const res = await axios.get("http://localhost:8000/api/tasks");
-      // console.log(res);
-      setTasks(res.data);
-    }
-    fetchTasks();
-  }, [])
-  return (
-    <>
-      <h1 className="text-3xl font-bold">Homepage</h1>
-      <TaskList tasks={tasks}/>
-
-    </>
-  );
+    fetchTasks()
+    .then((res) => {
+      setTasks(res.data)
+    })
+    .catch ((err) => console.log(err))
+  }, []);
+  return <TaskList tasks={tasks} />;
 }
 
 export default Homepage;
